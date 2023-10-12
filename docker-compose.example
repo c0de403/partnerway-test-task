@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  backend:
+    image: node:18.17.1
+    container_name: backend
+    command: npm run start:dev
+    working_dir: /usr/src/app
+    env_file: .env
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - postgres
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: ./
+        target: /usr/src/app
+      - type: volume
+        source: node_modules
+        target: /usr/src/app/node_modules
+        volume:
+          nocopy: true
+  postgres:
+    image: postgres:15.2
+    container_name: postgres
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_USER: $DATABASE_USERNAME
+      POSTGRES_PASSWORD: $DATABASE_PASSWORD
+      POSTGRES_DB: $DATABASE_NAME
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+volumes:
+  node_modules:
+  pgdata:
