@@ -5,6 +5,8 @@ import { CreateCurrentWeatherBllInterface } from '../interfaces/create-current-w
 import { WEATHER_CONSTANTS } from '../constants/weather.constants';
 import { WeatherRepositoryInterface } from '../interfaces/weather-repository.interface';
 import { WeatherInterface } from '../interfaces/weather/weather.interface';
+import { GetLatestWeatherByLocationBllInterface } from '../interfaces/get-latest-weather-by-location-bll.interface';
+import { WeatherError } from '../errors/weather.error';
 
 @Injectable()
 export class WeatherService {
@@ -14,6 +16,18 @@ export class WeatherService {
     @Inject(WEATHER_CONSTANTS.APPLICATION.REPOSITORY_TOKEN)
     private readonly weatherRepository: WeatherRepositoryInterface,
   ) {}
+
+  public async getLatestByLocation(
+    payload: GetLatestWeatherByLocationBllInterface,
+  ): Promise<WeatherInterface> {
+    const weather = await this.weatherRepository.findLatestByLocation(payload);
+
+    if (!weather) {
+      throw new WeatherError.NotFound();
+    }
+
+    return weather;
+  }
 
   public async createCurrent(
     payload: CreateCurrentWeatherBllInterface,

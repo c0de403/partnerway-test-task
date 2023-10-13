@@ -5,6 +5,7 @@ import { WeatherRepositoryInterface } from '../interfaces/weather-repository.int
 import { TypeormWeatherEntity } from '../entities/typeorm-weater.entity';
 import { CreateWeatherDalInterface } from '../interfaces/create-weather-dal/create-weather-dal.interface';
 import { WeatherInterface } from '../interfaces/weather/weather.interface';
+import { FindLatestWeatherByLocationDalInterface } from '../interfaces/find-latest-weather-by-location-dal.interface';
 
 @Injectable()
 export class TypeormWeatherRepository implements WeatherRepositoryInterface {
@@ -12,6 +13,33 @@ export class TypeormWeatherRepository implements WeatherRepositoryInterface {
     @InjectRepository(TypeormWeatherEntity)
     private readonly repository: Repository<TypeormWeatherEntity>,
   ) {}
+
+  public async findLatestByLocation(
+    data: FindLatestWeatherByLocationDalInterface,
+  ): Promise<WeatherInterface> {
+    const columnsMetadata = this.repository.metadata.columns.values();
+    const select = [];
+
+    for (const columnMetadata of columnsMetadata) {
+      if (data.exclude === columnMetadata.propertyName) {
+        continue;
+      }
+      select.push(columnMetadata.propertyName);
+    }
+
+    const weather = await this.repository.findOne({
+      where: {
+        latitude: data.latitude,
+        longitude: data.longitude,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      select,
+    });
+
+    return weather;
+  }
 
   public async create(
     data: CreateWeatherDalInterface,

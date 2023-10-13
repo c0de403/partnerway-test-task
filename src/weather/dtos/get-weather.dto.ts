@@ -3,7 +3,7 @@ import { IsOptional, IsEnum, Min, Max, IsNumber } from 'class-validator';
 import { WEATHER_CONSTANTS } from '../constants/weather.constants';
 import { ExcludePartOfWeatherEnum } from '../enums/exclude-part-of-weather.enum';
 
-export class CreateCurrentWeatherDto {
+export class GetWeatherDto {
   @IsNumber()
   @Min(WEATHER_CONSTANTS.DOMAIN.LATITUDE_MIN_VALUE)
   @Max(WEATHER_CONSTANTS.DOMAIN.LATITUDE_MAX_VALUE)
