@@ -27,4 +27,7 @@ export class EnvironmentVariableEntity {
 
   @IsString()
   public readonly DATABASE_NAME: string;
+
+  @IsString()
+  public readonly OPEN_WEATHER_MAP_API_KEY: string;
 }
