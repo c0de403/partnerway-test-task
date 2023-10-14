@@ -35,3 +35,9 @@
     ```bash
     npm run db:migrate
     ```
+
+## 🧪 Running Unit Tests
+1. To run the unit tests for the application:
+   ```bash
+   npm run test
+   ```
