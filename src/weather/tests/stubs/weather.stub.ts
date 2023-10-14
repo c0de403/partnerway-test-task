@@ -3,6 +3,7 @@ import { WeatherInterface } from 'src/weather/interfaces/weather/weather.interfa
 import { CurrentStub } from './current.stub';
 import { MinutelyStub } from './minutely.stub';
 import { HourlyStub } from './hourly.stub';
+import { DailyStub } from './daily.stub';
 import { AlertStub } from './alert.stub';
 
 export class WeatherStub {
@@ -16,6 +17,7 @@ export class WeatherStub {
       current: CurrentStub.generateRandom(),
       minutely: MinutelyStub.generateRandomMany(),
       hourly: HourlyStub.generateRandomMany(),
+      daily: DailyStub.generateRandomMany(),
       alerts: AlertStub.generateRandomMany(),
       createdAt: new Date(),
     };
